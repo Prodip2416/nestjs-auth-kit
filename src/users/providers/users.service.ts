@@ -1,74 +1,60 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import {
   BadRequestException,
-  InternalServerErrorException,
+  Injectable,
+  RequestTimeoutException,
 } from '@nestjs/common';
 import { User } from '../user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { FindOneUserByEmailProvider } from './find-one-user-by-email.provider';
+import { CreateUserProvider } from './create-user.provider';
 import { CreateUserDTO } from '../dtos/create-user.dto';
-import { HashingService } from 'src/auth/hashing/providers/hashing.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
-    private readonly hashingService: HashingService,
+    private usersRepository: Repository<User>,
+
+    private readonly createUserProvider: CreateUserProvider,
+    private readonly findOneUserByEmailProvider: FindOneUserByEmailProvider,
   ) {}
 
-  public async createUser(createUserDTO: CreateUserDTO) {
-    try {
-      const existingUser = await this.userRepository.findOne({
-        where: { email: createUserDTO.email },
-      });
-
-      if (existingUser) {
-        throw new BadRequestException(
-          'Email address is already in use. Please use a different one.',
-        );
-      }
-
-      // Create a new user instance
-      const newUser = this.userRepository.create({
-        ...createUserDTO,
-        password: await this.hashingService.hashPassword(
-          createUserDTO.password,
-        ),
-      });
-      // Save the new user to the database
-      await this.userRepository.save(newUser);
-
-      return newUser;
-    } catch (error) {
-      // console.error('Error during user creation:', error);
-      if (error instanceof BadRequestException) {
-        throw error;
-      }
-
-      throw new InternalServerErrorException(
-        'There was an issue creating the user. Please try again later.',
-      );
-    }
+  /**
+   * Method to create a new user
+   */
+  public async createUser(createUserDto: CreateUserDTO) {
+    return await this.createUserProvider.createUser(createUserDto);
   }
 
-  public async findOneByEmail(email: string) {
+  public async findOneById(id: number) {
+    let user;
+
     try {
-      const user = await this.userRepository.findOne({
-        where: { email },
+      user = await this.usersRepository.findOneBy({
+        id,
       });
-
-      // If no user is found, throw a NotFoundException
-      if (!user) {
-        throw new NotFoundException(`User with email ${email} not found`);
-      }
-
-      return user;
     } catch (error) {
-      // console.error(`Error finding user by email: ${email}`, error);
-      throw new InternalServerErrorException(
-        'An error occurred while retrieving the user',
+      throw new RequestTimeoutException(
+        'Unable to process your request at the moment please try later',
+        {
+          description: 'Error connecting to the the datbase',
+        },
       );
     }
+
+    /**
+     * Handle the user does not exist
+     */
+    if (!user) {
+      throw new BadRequestException('The user id does not exist');
+    }
+
+    return user;
+  }
+
+  // Finds one user by email
+  public async findOneByEmail(email: string) {
+    return await this.findOneUserByEmailProvider.findOneByEmail(email);
   }
 }

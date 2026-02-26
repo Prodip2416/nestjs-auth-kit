@@ -57,4 +57,21 @@ export class UsersService {
   public async findOneByEmail(email: string) {
     return await this.findOneUserByEmailProvider.findOneByEmail(email);
   }
+
+  public async findAll() {
+    let users;
+
+    try {
+      users = await this.usersRepository.find();
+    } catch (error) {
+      throw new RequestTimeoutException(
+        'Unable to process your request at the moment please try later',
+        {
+          description: 'Error connecting to the the datbase',
+        },
+      );
+    }
+
+    return users;
+  }
 }

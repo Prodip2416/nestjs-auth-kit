@@ -16,6 +16,7 @@
     "migration:generate": "sh -c 'yarn typeorm migration:generate src/database/migrations/$1' --",
     "migration:run": "npm run typeorm -- migration:run",
     "migration:revert": "npm run typeorm -- migration:revert",
+    "seed": "NODE_ENV=development ts-node -r tsconfig-paths/register src/database/seeds/seed.ts",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",

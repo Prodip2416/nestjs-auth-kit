@@ -2,9 +2,3 @@
 GET http://localhost:3000/users
 Content-Type: application/json
 
-{
-  "firstName":"tod",
-  "lastName":"",
-  "email":"tod@gmail.com",
-  "password":"123456"
-}

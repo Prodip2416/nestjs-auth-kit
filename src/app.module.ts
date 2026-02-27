@@ -47,7 +47,7 @@ const ENV = process.env.NODE_ENV ?? 'development';
       provide: APP_GUARD,
       useClass: AuthenticationGuard,
     },
-    AccessTokenGuard
+    AccessTokenGuard,
   ],
 })
 export class AppModule {}

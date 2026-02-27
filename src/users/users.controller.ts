@@ -9,7 +9,7 @@ export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
   @Get()
-  @Auth(AuthType.None)
+  // @Auth(AuthType.None)
   public async findAll() {
     return await this.userService.findAll();
   }

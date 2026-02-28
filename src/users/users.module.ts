@@ -6,9 +6,10 @@ import { User } from './user.entity';
 import { HashingModule } from 'src/auth/hashing/hashing.module';
 import { FindOneUserByEmailProvider } from './providers/find-one-user-by-email.provider';
 import { CreateUserProvider } from './providers/create-user.provider';
+import { UpdateUserProvider } from './providers/update-user.provider';
 @Module({
   controllers: [UsersController],
-  providers: [UsersService, FindOneUserByEmailProvider, CreateUserProvider],
+  providers: [UsersService, FindOneUserByEmailProvider, CreateUserProvider, UpdateUserProvider],
   imports: [TypeOrmModule.forFeature([User]), HashingModule],
   exports: [UsersService],
 })

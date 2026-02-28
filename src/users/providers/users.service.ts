@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneUserByEmailProvider } from './find-one-user-by-email.provider';
 import { CreateUserProvider } from './create-user.provider';
 import { CreateUserDTO } from '../dtos/create-user.dto';
+import { UpdateUserProvider } from './update-user.provider';
 
 @Injectable()
 export class UsersService {
@@ -18,6 +19,7 @@ export class UsersService {
 
     private readonly createUserProvider: CreateUserProvider,
     private readonly findOneUserByEmailProvider: FindOneUserByEmailProvider,
+    private readonly updateUserProvider: UpdateUserProvider,
   ) {}
 
   /**
@@ -73,5 +75,9 @@ export class UsersService {
     }
 
     return users;
+  }
+
+  public async updateUserPasswordById(userId: number, password: string) {
+    return await this.updateUserProvider.updateUserPassword(userId, password);
   }
 }

@@ -9,6 +9,7 @@ import { SignInProvider } from './providers/sign-in.provider';
 import { ConfigModule } from '@nestjs/config';
 import jwtConfig from './jwt-config/jwt.config';
 import { JwtModule } from '@nestjs/jwt';
+import { ChangePasswordProvider } from './providers/change-password.provider';
 
 @Module({
   providers: [
@@ -16,6 +17,7 @@ import { JwtModule } from '@nestjs/jwt';
     SignInProvider,
     GenerateTokensProvider,
     RefreshTokensProvider,
+    ChangePasswordProvider
   ],
   imports: [
     HashingModule,

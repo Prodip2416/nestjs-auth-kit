@@ -382,15 +382,15 @@ Authorization: Bearer <access_token>
 
 ## Suitable Project Types
 
-এই কিটটি যে ধরনের প্রজেক্টে ব্যবহার করা যায়:
+This kit is a solid starting point for:
 
-- **REST API Backend** — যেকোনো backend যেখানে user authentication দরকার
-- **SaaS Application** — multi-user app with login, logout, token refresh
-- **Admin Panel / Dashboard** — React/Vue/Angular admin UI-র backend
-- **Mobile App Backend** — iOS/Android client-এর জন্য token-based auth
-- **Microservice Auth Layer** — dedicated auth service হিসেবে
-- **Learning Project** — NestJS architecture ও JWT auth pattern শেখার জন্য clean codebase
-- **API Gateway** — যেকোনো NestJS app-এ JWT guard plug-in করার base
+- **REST API Backend** — any backend that needs user authentication from day one
+- **SaaS Application** — multi-user apps with login, logout, and token refresh
+- **Admin Panel / Dashboard** — backend for React / Vue / Angular admin UIs
+- **Mobile App Backend** — token-based auth works with iOS and Android clients
+- **Microservice Auth Layer** — deploy as a dedicated auth service
+- **Learning Project** — clean NestJS architecture for studying JWT auth patterns
+- **API Gateway** — plug the JWT guard into any existing NestJS application
 
 ---
 

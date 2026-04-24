@@ -1,98 +1,409 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# NestJS Auth Kit
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Production-ready NestJS authentication starter — JWT access/refresh tokens, bcrypt password hashing, MySQL + TypeORM, migration support, and seeding. Drop it into any backend project that needs auth from day one.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## Tech Stack
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+| Layer | Technology |
+|---|---|
+| Framework | NestJS 11 |
+| Language | TypeScript 5 |
+| Database | MySQL 8 |
+| ORM | TypeORM 0.3 |
+| Auth | JWT (access + refresh token) |
+| Hashing | bcrypt |
+| Validation | class-validator + class-transformer |
+| Package Manager | Yarn |
+| Runtime | Node.js >= 18 |
 
-## Project setup
+---
 
-```bash
-$ yarn install
-```
+## Prerequisites
 
-## Compile and run the project
+- Node.js >= 18
+- Yarn
+- MySQL 8 running locally (or remote)
+
+---
+
+## Installation
 
 ```bash
-# development
-$ yarn run start
+# Clone
+git clone https://github.com/your-username/nestjs-auth-kit.git
+cd nestjs-auth-kit
 
-# watch mode
-$ yarn run start:dev
+# Install dependencies
+yarn install
 
-# production mode
-$ yarn run start:prod
+# Setup environment
+cp .env.development .env
+# Edit .env — set DB credentials and JWT secrets
 ```
 
-## Run tests
+---
+
+## Environment Variables
+
+Create `.env.development` (or `.env`) with:
+
+```env
+DB_TYPE=mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_USERNAME=root
+DB_PASSWORD=root
+DB_NAME=nestjs_revamp
+DB_AUTOLOAD=true
+DB_SYNC=false
+
+API_VERSION=1.00
+
+JWT_SECRET=your_jwt_secret_key
+JWT_TOKEN_AUDIENCE=localhost:3000
+JWT_TOKEN_ISSUER=localhost
+JWT_ACCESS_TOKEN_TTL=3600       # 1 hour (seconds)
+JWT_REFRESH_TOKEN_TTL=86400     # 24 hours (seconds)
+```
+
+---
+
+## Commands
+
+### Development
 
 ```bash
-# unit tests
-$ yarn run test
+# Start in watch mode (hot reload)
+yarn start:dev
 
-# e2e tests
-$ yarn run test:e2e
+# Start normal
+yarn start
 
-# test coverage
-$ yarn run test:cov
+# Start in debug mode
+yarn start:debug
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### Production
 
 ```bash
-$ yarn install -g @nestjs/mau
-$ mau deploy
+# Build
+yarn build
+
+# Run built output
+yarn start:prod
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### Database Migrations
 
-## Resources
+```bash
+# Generate migration from entity changes
+yarn migration:generate MigrationName
 
-Check out a few resources that may come in handy when working with NestJS:
+# Run all pending migrations
+yarn migration:run
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+# Revert last migration
+yarn migration:revert
+```
 
-## Support
+### Seeding
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+# Seed initial user data
+yarn seed
+```
 
-## Stay in touch
+### Code Quality
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+# Lint and auto-fix
+yarn lint
+
+# Format with Prettier
+yarn format
+```
+
+### Testing
+
+```bash
+# Unit tests
+yarn test
+
+# Unit tests in watch mode
+yarn test:watch
+
+# Coverage report
+yarn test:cov
+
+# End-to-end tests
+yarn test:e2e
+```
+
+---
+
+## Folder Structure
+
+```
+nestjs-auth-kit/
+├── src/
+│   ├── app.module.ts                        # Root module
+│   ├── app.controller.ts                    # Root controller
+│   ├── app.service.ts                       # Root service
+│   ├── main.ts                              # Bootstrap entry point
+│   │
+│   ├── auth/                                # Auth module
+│   │   ├── auth.controller.ts               # Routes: login, refresh, change-password
+│   │   ├── auth.module.ts
+│   │   ├── constants/                       # Shared constants (token key names)
+│   │   ├── decorators/                      # @Auth() custom decorator
+│   │   ├── dtos/                            # SignInDto, RefreshTokenDTO, ChangePasswordDto
+│   │   ├── enums/                           # AuthType enum (None, Bearer)
+│   │   ├── guards/
+│   │   │   ├── access-token/                # JWT access token guard
+│   │   │   └── authentication/              # Main auth guard (dispatches by AuthType)
+│   │   ├── hashing/                         # bcrypt abstraction
+│   │   │   └── providers/                   # HashingProvider (abstract) + BcryptService
+│   │   ├── interfaces/                      # ActiveUserData interface
+│   │   ├── jwt-config/                      # JWT config factory
+│   │   └── providers/                       # AuthService, SignInProvider,
+│   │                                        # RefreshTokensProvider, ChangePasswordProvider,
+│   │                                        # GenerateTokensProvider
+│   │
+│   ├── users/                               # Users module
+│   │   ├── users.controller.ts              # Routes: list users, create user
+│   │   ├── users.module.ts
+│   │   ├── user.entity.ts                   # TypeORM User entity
+│   │   ├── dtos/                            # CreateUserDTO
+│   │   └── providers/                       # UsersService, CreateUserProvider,
+│   │                                        # FindOneUserByEmailProvider, UpdateUserProvider
+│   │
+│   ├── config/
+│   │   └── database.config.ts               # TypeORM config via @nestjs/config
+│   │
+│   └── database/
+│       ├── data-source.ts                   # TypeORM DataSource (used by CLI)
+│       ├── migrations/                      # TypeORM migration files
+│       └── seeds/                           # DB seed scripts
+│
+├── test/                                    # E2E tests
+├── .env.development                         # Dev environment variables
+├── .env.production                          # Prod environment variables
+├── nest-cli.json
+├── tsconfig.json
+└── package.json
+```
+
+---
+
+## API Reference
+
+Base URL: `http://localhost:3000`
+
+### Authentication Header
+
+All protected routes require:
+```
+Authorization: Bearer <access_token>
+```
+
+Public routes are marked with `@Auth(AuthType.None)`. Default: all routes protected.
+
+---
+
+### Auth APIs
+
+#### `POST /auth/login`
+Public. Returns access + refresh tokens.
+
+**Request Body:**
+```json
+{
+  "email": "user@example.com",
+  "password": "yourpassword"
+}
+```
+
+**Response `200`:**
+```json
+{
+  "accessToken": "eyJhbGci...",
+  "refreshToken": "eyJhbGci..."
+}
+```
+
+---
+
+#### `POST /auth/refresh-tokens`
+Public. Rotate expired access token using refresh token.
+
+**Request Body:**
+```json
+{
+  "refreshToken": "eyJhbGci..."
+}
+```
+
+**Response `200`:**
+```json
+{
+  "accessToken": "eyJhbGci...",
+  "refreshToken": "eyJhbGci..."
+}
+```
+
+---
+
+#### `POST /auth/change-password`
+Protected (Bearer token required). Changes password for the authenticated user.
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+```
+
+**Request Body:**
+```json
+{
+  "password": "currentPassword",
+  "newPassword": "newPassword123"
+}
+```
+
+**Response `200`:** Success message
+
+---
+
+### User APIs
+
+#### `GET /users`
+Protected. Returns all registered users.
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+```
+
+**Response `200`:**
+```json
+[
+  {
+    "id": 1,
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john@example.com",
+    "phoneNo": "01700000000",
+    "isActive": true,
+    "createdAt": "2025-02-25T10:00:00.000Z",
+    "updatedAt": "2025-02-25T10:00:00.000Z"
+  }
+]
+```
+
+---
+
+#### `POST /users/create`
+Protected. Register a new user.
+
+**Headers:**
+```
+Authorization: Bearer <access_token>
+```
+
+**Request Body:**
+```json
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john@example.com",
+  "password": "securePassword123"
+}
+```
+
+**Response `201`:** Created user object
+
+---
+
+## API Summary
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| POST | `/auth/login` | Public | Login, receive tokens |
+| POST | `/auth/refresh-tokens` | Public | Rotate access token |
+| POST | `/auth/change-password` | Bearer | Change own password |
+| GET | `/users` | Bearer | List all users |
+| POST | `/users/create` | Bearer | Create new user |
+
+---
+
+## User Entity Schema
+
+| Column | Type | Notes |
+|--------|------|-------|
+| id | int | Auto PK |
+| firstName | varchar(250) | Required |
+| lastName | varchar(250) | Optional |
+| email | varchar(100) | Unique |
+| password | varchar(200) | bcrypt hashed |
+| phoneNo | varchar(20) | Optional |
+| isActive | boolean | Default: true |
+| createdAt | datetime | Auto |
+| updatedAt | datetime | Auto |
+
+---
+
+## Auth Flow
+
+```
+1. Login
+   Client ──POST /auth/login──► SignInProvider
+                                  │ verify password (bcrypt)
+                                  │ generate access + refresh tokens
+                                 ◄┘
+                          { accessToken, refreshToken }
+
+2. Protected Request
+   Client ──Bearer accessToken──► AuthenticationGuard
+                                    │ AccessTokenGuard (JWT verify)
+                                    │ decode → ActiveUserData
+                                    │ attach to req[REQUEST_USER_KEY]
+                                   ◄┘ handler executes
+
+3. Token Refresh
+   Client ──POST /auth/refresh-tokens──► RefreshTokensProvider
+                                           │ verify refreshToken
+                                           │ issue new token pair
+                                          ◄┘
+                                   { accessToken, refreshToken }
+```
+
+---
+
+## Suitable Project Types
+
+এই কিটটি যে ধরনের প্রজেক্টে ব্যবহার করা যায়:
+
+- **REST API Backend** — যেকোনো backend যেখানে user authentication দরকার
+- **SaaS Application** — multi-user app with login, logout, token refresh
+- **Admin Panel / Dashboard** — React/Vue/Angular admin UI-র backend
+- **Mobile App Backend** — iOS/Android client-এর জন্য token-based auth
+- **Microservice Auth Layer** — dedicated auth service হিসেবে
+- **Learning Project** — NestJS architecture ও JWT auth pattern শেখার জন্য clean codebase
+- **API Gateway** — যেকোনো NestJS app-এ JWT guard plug-in করার base
+
+---
+
+## Development Notes
+
+- `ValidationPipe` globally enabled — `whitelist: true`, `forbidNonWhitelisted: true`
+- `DB_SYNC=false` — always use migrations, never auto-sync in any environment
+- `@Auth(AuthType.None)` — marks route as public; omit for default Bearer protection
+- Password hashing abstracted via `HashingProvider` — swap bcrypt with argon2 by changing one binding
+- Token TTLs fully configurable via env variables
+
+---
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+UNLICENSED — private starter kit.
